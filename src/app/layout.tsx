@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   keywords: ["Blood Donation", "Donate Blood", "Save Lives", "Blood Camp", "Blood Bank", "Healthcare"],
   authors: [{ name: "Blood Donation Camp Team" }],
   icons: {
-    icon: "/logo.svg",
+    icon: "/logo.jpeg",
   },
   openGraph: {
     title: "Blood Donation Camp",

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { mobile, name, bloodGroup } = body;
+    const { mobile, name, bloodGroup, reminderType } = body;
 
     if (!mobile || !name || !bloodGroup) {
       return NextResponse.json(

@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Users, 
-  Download, 
+import {
+  Users,
+  Download,
   LogOut,
   Loader2,
   MessageCircle,
@@ -24,6 +24,8 @@ interface Registration {
   place: string;
   bloodGroup: string;
   messageSent: boolean;
+  thirtySixHrReminder: boolean;
+  sixteenHrReminder: boolean;
   createdAt: string;
 }
 
@@ -163,7 +165,7 @@ A drop of blood, a lifetime of hope! ❤️
 
 _This is an automated message from Blood Donation Camp._`);
     window.open(`https://wa.me/91${reg.mobile}?text=${message}`, '_blank');
-    
+
     try {
       await fetch("/api/mark-whatsapp-sent", {
         method: "POST",
@@ -176,26 +178,70 @@ _This is an automated message from Blood Donation Camp._`);
     }
   };
 
+  const handleSendWhatsApp36hrs = async (reg: Registration) => {
+
+    const message = encodeURIComponent(
+      "https://www.nrnbloodcamp.in/36hrs.jpeg"
+    );
+
+    window.open(`https://wa.me/91${reg.mobile}?text=${message}`, "_blank");
+
+    try {
+      await fetch("/api/mark-36hr-reminder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: reg.id }),
+      });
+
+      fetchRegistrations();
+
+    } catch {
+      // ignore errors
+    }
+  };
+
+  const handleSendWhatsApp16hrs = async (reg: Registration) => {
+
+    const message = encodeURIComponent(
+      "https://www.nrnbloodcamp.in/16hrs.jpeg"
+    );
+
+    window.open(`https://wa.me/91${reg.mobile}?text=${message}`, "_blank");
+
+    try {
+      await fetch("/api/mark-16hr-reminder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: reg.id }),
+      });
+
+      fetchRegistrations();
+
+    } catch {
+      // ignore errors
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
-            <button 
+            <button
               onClick={() => router.push("/")}
               className="flex items-center gap-3 hover:opacity-80 transition-opacity"
             >
-              <img 
-                src="/logo.jpeg" 
-                alt="NRN 74th Birthday" 
+              <img
+                src="/logo.jpeg"
+                alt="NRN 74th Birthday"
                 className="w-10 h-10 rounded-lg object-cover"
               />
               <div>
                 <h1 className="text-lg font-semibold text-slate-900">NRN 74th Birthday - Blood Donation Camp</h1>
               </div>
             </button>
-            
+
             <Button variant="ghost" size="sm" onClick={() => router.push("/")}>
               <LogOut className="w-4 h-4 mr-1.5" />
               Back to Home
@@ -294,6 +340,8 @@ _This is an automated message from Blood Donation Camp._`);
                             <TableHead className="text-xs font-medium">Place</TableHead>
                             <TableHead className="text-xs font-medium">Blood</TableHead>
                             <TableHead className="text-xs font-medium">WhatsApp</TableHead>
+                            <TableHead className="text-xs font-medium">36hrs Reminder</TableHead>
+                            <TableHead className="text-xs font-medium">16hrs Reminder</TableHead>
                             <TableHead className="text-xs font-medium">Date</TableHead>
                             <TableHead className="text-xs font-medium">Action</TableHead>
                           </TableRow>
@@ -324,6 +372,40 @@ _This is an automated message from Blood Donation Camp._`);
                                   >
                                     <MessageCircle className="w-3 h-3 mr-1" />
                                     Send
+                                  </Button>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {reg.thirtySixHrReminder ? (
+                                  <Badge variant="outline" className="text-xs text-emerald-600 border-emerald-200 bg-emerald-50">
+                                    36hrs Sent
+                                  </Badge>
+                                ) : (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 text-xs bg-green-50 hover:bg-green-100 text-green-700"
+                                    onClick={() => void handleSendWhatsApp36hrs(reg)}
+                                  >
+                                    <MessageCircle className="w-3 h-3 mr-1" />
+                                    36hrs Send
+                                  </Button>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {reg.sixteenHrReminder ? (
+                                  <Badge variant="outline" className="text-xs text-emerald-600 border-emerald-200 bg-emerald-50">
+                                    16hrs Sent
+                                  </Badge>
+                                ) : (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 text-xs bg-green-50 hover:bg-green-100 text-green-700"
+                                    onClick={() => void handleSendWhatsApp16hrs(reg)}
+                                  >
+                                    <MessageCircle className="w-3 h-3 mr-1" />
+                                    16hrs Send
                                   </Button>
                                 )}
                               </TableCell>
@@ -363,9 +445,9 @@ _This is an automated message from Blood Donation Camp._`);
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <img 
-                src="/logo.jpeg" 
-                alt="NRN 74th Birthday" 
+              <img
+                src="/logo.jpeg"
+                alt="NRN 74th Birthday"
                 className="w-8 h-8 rounded-lg object-cover"
               />
               <span className="text-sm font-medium">NRN 74th Birthday - Blood Donation Camp</span>

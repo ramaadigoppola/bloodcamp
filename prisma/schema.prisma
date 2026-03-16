@@ -18,6 +18,8 @@ model BloodDonationRegistration {
   place     String
   bloodGroup String?
   messageSent Boolean @default(false)
+  thirtySixHrReminder Boolean @default(false)
+  sixteenHrReminder Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

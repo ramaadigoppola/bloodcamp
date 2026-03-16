@@ -24,6 +24,8 @@ export async function GET() {
       "Place": reg.place,
       "Blood Group": reg.bloodGroup || "Unknown",
       "WhatsApp Sent": reg.messageSent ? "Yes" : "No",
+      "36hrs Reminder": reg.thirtySixHrReminder ? "Yes" : "No",
+      "16hrs Reminder": reg.sixteenHrReminder ? "Yes" : "No",
       "Registered Date": new Date(reg.createdAt).toLocaleDateString(),
       "Registered Time": new Date(reg.createdAt).toLocaleTimeString(),
     }));

@@ -184,6 +184,8 @@ _This is an automated message from Blood Donation Camp._`);
       "Dear Donor\nThis is a friendly reminder about the Blood Donation Camp on 18th March. Your support can help save lives. We look forward to your valuable participation. Thank you!"
     );
 
+    // For 36hrs reminder, we can use the same message as 16hrs reminder for simplicity
+
     window.open(`https://wa.me/91${reg.mobile}?text=${message}`, "_blank");
 
     try {
